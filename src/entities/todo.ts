@@ -1,7 +1,13 @@
 import { Entity } from '@entities/entity';
 import { DatabaseClient } from '@utils/database';
 
-import { PutCommandInput, PutCommandOutput, ScanCommandInput, ScanCommandOutput } from '@aws-sdk/lib-dynamodb';
+import {
+  GetCommandInput,
+  GetCommandOutput,
+  PutCommandInput,
+  ScanCommandInput,
+  ScanCommandOutput,
+} from '@aws-sdk/lib-dynamodb';
 
 const TABLE_NAME = process.env.TABLE_NAME || 'table-name';
 
@@ -25,8 +31,22 @@ export class TodoEntity implements Entity<Todo, string> {
     this.databaseClient = databaseClient;
   }
 
-  async findOne(id: string): Promise<Todo> {
-    throw new Error('Method not implemented.');
+  async findOne(todoId: string): Promise<Todo> {
+    console.log('TodoEntity::findOne');
+
+    // 1. map input
+    const input: GetCommandInput = {
+      TableName: TABLE_NAME,
+      Key: {
+        todoId,
+      },
+    };
+
+    // 2. fetch from database
+    const output: GetCommandOutput = await this.databaseClient.get(input);
+
+    // 3. map/return output
+    return output.Item as Todo;
   }
 
   async findAll(): Promise<Todo[]> {
