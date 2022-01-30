@@ -1,0 +1,9 @@
+{
+  "headers": {
+    "Content-Type": "application/json"
+  },
+  "body": "{\"todoId\": \"1f625c4405fe9964\", \"title\": \"Wash the car\"}",
+  "pathParameters": {
+    "todoId": "1f625c4405fe9964"
+  }
+}

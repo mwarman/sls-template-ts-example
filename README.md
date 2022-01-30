@@ -45,21 +45,38 @@ Check the [sls invoke local command documentation](https://www.serverless.com/fr
 
 Copy and replace your `url` - found in Serverless `deploy` command output - and `name` parameter in the following `curl` command in your terminal or in Postman to test your newly deployed application.
 
+#### Create a Todo
+
 ```
 curl --request POST \
      --header 'Content-Type: application/json' \
-     --data-raw '{"title":"Wash the dishes","isComplete":true}' \
+     --data-raw '{"title":"Wash the dishes","isComplete":false}' \
      --verbose \
      https://ikqynfzrd3.execute-api.us-east-1.amazonaws.com/dev/todos
 ```
 
-```
-curl --location --request POST 'https://myApiEndpoint/dev/hello' \
---header 'Content-Type: application/json' \
---data-raw '{
-"name": "Frederic"
-}'
+#### Get a Todo
 
+```
+curl --verbose \
+     https://ikqynfzrd3.execute-api.us-east-1.amazonaws.com/dev/todos/35300ed20bb2e853
+```
+
+#### List Todos
+
+```
+curl --verbose \
+     https://ikqynfzrd3.execute-api.us-east-1.amazonaws.com/dev/todos
+```
+
+#### Update a Todo
+
+```
+curl --request PUT \
+     --header 'Content-Type: application/json' \
+     --data-raw '{"todoId":"35300ed20bb2e853","isComplete":true,"title":"Wash the dishes"}' \
+     --verbose \
+     https://ikqynfzrd3.execute-api.us-east-1.amazonaws.com/dev/todos/35300ed20bb2e853
 ```
 
 ## Template features

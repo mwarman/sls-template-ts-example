@@ -1,13 +1,7 @@
 import { Entity } from '@entities/entity';
 import { DatabaseClient } from '@utils/database';
 
-import {
-  GetCommandInput,
-  GetCommandOutput,
-  PutCommandInput,
-  ScanCommandInput,
-  ScanCommandOutput,
-} from '@aws-sdk/lib-dynamodb';
+import { GetCommandInput, PutCommandInput, ScanCommandInput, UpdateCommandInput } from '@aws-sdk/lib-dynamodb';
 
 const TABLE_NAME = process.env.TABLE_NAME || 'table-name';
 
@@ -19,6 +13,7 @@ export interface Todo {
   title: string;
   isComplete: boolean;
   createdAt?: string;
+  updatedAt?: string;
 }
 
 /**
@@ -43,7 +38,7 @@ export class TodoEntity implements Entity<Todo, string> {
     };
 
     // 2. fetch from database
-    const output: GetCommandOutput = await this.databaseClient.get(input);
+    const output = await this.databaseClient.get(input);
 
     // 3. map/return output
     return output.Item as Todo;
@@ -58,7 +53,7 @@ export class TodoEntity implements Entity<Todo, string> {
     };
 
     // 2. fetch from database
-    const output: ScanCommandOutput = await this.databaseClient.scan(input);
+    const output = await this.databaseClient.scan(input);
 
     // 3. map/return output
     return output.Items as Todo[];
@@ -83,8 +78,41 @@ export class TodoEntity implements Entity<Todo, string> {
     return todo;
   }
 
-  async update(item: Todo): Promise<Todo> {
-    throw new Error('Method not implemented.');
+  async update(todo: Todo): Promise<Todo> {
+    console.log('TodoEntity::update');
+
+    try {
+      // 1. map input
+      const { todoId, title, isComplete = false } = todo;
+      const updatedAt = new Date().toISOString();
+      const input: UpdateCommandInput = {
+        TableName: TABLE_NAME,
+        Key: {
+          todoId,
+        },
+        UpdateExpression: 'SET title = :ti, isComplete = :ic, updatedAt = :ua',
+        ConditionExpression: 'todoId = :id',
+        ExpressionAttributeValues: {
+          ':id': todoId,
+          ':ti': title,
+          ':ic': isComplete,
+          ':ua': updatedAt,
+        },
+        ReturnValues: 'ALL_NEW',
+      };
+
+      // 2. put in database
+      const output = await this.databaseClient.update(input);
+
+      // 3. map/return output
+      return output.Attributes as Todo;
+    } catch (error) {
+      if (error.name === 'ConditionalCheckFailedException') {
+        // not found
+        return null;
+      }
+      throw error;
+    }
   }
 
   async delete(id: string): Promise<void> {
