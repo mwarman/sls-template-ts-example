@@ -1,6 +1,7 @@
 import type { AWS } from '@serverless/typescript';
 
 import listTodos from '@functions/listTodos';
+import createTodo from '@functions/createTodo';
 
 const tableName = '${self:service}-todo-${self:custom.stage}';
 
@@ -49,7 +50,7 @@ const serverlessConfiguration: AWS = {
     lambdaHashingVersion: '20201221',
   },
   // import the function via paths
-  functions: { listTodos },
+  functions: { listTodos, createTodo },
   package: { individually: true },
   custom: {
     esbuild: {

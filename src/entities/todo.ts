@@ -1,7 +1,7 @@
 import { Entity } from '@entities/entity';
 import { DatabaseClient } from '@utils/database';
 
-import { ScanCommandInput, ScanCommandOutput } from '@aws-sdk/lib-dynamodb';
+import { PutCommandInput, PutCommandOutput, ScanCommandInput, ScanCommandOutput } from '@aws-sdk/lib-dynamodb';
 
 const TABLE_NAME = process.env.TABLE_NAME || 'table-name';
 
@@ -12,6 +12,7 @@ export interface Todo {
   todoId: string;
   title: string;
   isComplete: boolean;
+  createdAt?: string;
 }
 
 /**
@@ -31,7 +32,7 @@ export class TodoEntity implements Entity<Todo, string> {
   async findAll(): Promise<Todo[]> {
     console.log('TodoEntity::findAll');
 
-    // 1. format input
+    // 1. map input
     const input: ScanCommandInput = {
       TableName: TABLE_NAME,
     };
@@ -39,12 +40,27 @@ export class TodoEntity implements Entity<Todo, string> {
     // 2. fetch from database
     const output: ScanCommandOutput = await this.databaseClient.scan(input);
 
-    // 3. parse output
+    // 3. map/return output
     return output.Items as Todo[];
   }
 
-  async create(item: Todo): Promise<Todo> {
-    throw new Error('Method not implemented.');
+  async create(todo: Todo): Promise<Todo> {
+    console.log('TodoEntity::create');
+
+    // 1. map input
+    const input: PutCommandInput = {
+      TableName: TABLE_NAME,
+      Item: {
+        ...todo,
+      },
+      ConditionExpression: 'attribute_not_exists(todoId)',
+    };
+
+    // 2. put in database (Dynamo put item does not return the created item)
+    await this.databaseClient.put(input);
+
+    // 3. map/return output
+    return todo;
   }
 
   async update(item: Todo): Promise<Todo> {
