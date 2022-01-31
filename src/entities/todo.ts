@@ -1,7 +1,13 @@
 import { Entity } from '@entities/entity';
 import { DatabaseClient } from '@utils/database';
 
-import { GetCommandInput, PutCommandInput, ScanCommandInput, UpdateCommandInput } from '@aws-sdk/lib-dynamodb';
+import {
+  DeleteCommandInput,
+  GetCommandInput,
+  PutCommandInput,
+  ScanCommandInput,
+  UpdateCommandInput,
+} from '@aws-sdk/lib-dynamodb';
 
 const TABLE_NAME = process.env.TABLE_NAME || 'table-name';
 
@@ -115,7 +121,21 @@ export class TodoEntity implements Entity<Todo, string> {
     }
   }
 
-  async delete(id: string): Promise<void> {
-    throw new Error('Method not implemented.');
+  async delete(todoId: string): Promise<void> {
+    console.log('TodoEntity::delete');
+
+    // 1. map input
+    const input: DeleteCommandInput = {
+      TableName: TABLE_NAME,
+      Key: {
+        todoId,
+      },
+    };
+
+    // 2. delete from database
+    await this.databaseClient.delete(input);
+
+    // 3. map/return output
+    return;
   }
 }

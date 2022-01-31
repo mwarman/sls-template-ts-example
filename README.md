@@ -79,6 +79,16 @@ curl --request PUT \
      https://ikqynfzrd3.execute-api.us-east-1.amazonaws.com/dev/todos/35300ed20bb2e853
 ```
 
+#### Delete a Todo
+
+```
+curl --request DELETE \
+     --header 'Content-Type: application/json' \
+     --data-raw '{"todoId":"35300ed20bb2e853","isComplete":true,"title":"Wash the dishes"}' \
+     --verbose \
+     https://ikqynfzrd3.execute-api.us-east-1.amazonaws.com/dev/todos/35300ed20bb2e853
+```
+
 ## Template features
 
 ### Project structure

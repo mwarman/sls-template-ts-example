@@ -4,6 +4,7 @@ import getTodo from '@functions/getTodo';
 import listTodos from '@functions/listTodos';
 import createTodo from '@functions/createTodo';
 import updateTodo from '@functions/updateTodo';
+import deleteTodo from '@functions/deleteTodo';
 
 const tableName = '${self:service}-todo-${self:custom.stage}';
 
@@ -52,7 +53,7 @@ const serverlessConfiguration: AWS = {
     lambdaHashingVersion: '20201221',
   },
   // import the function via paths
-  functions: { getTodo, listTodos, createTodo, updateTodo },
+  functions: { getTodo, listTodos, createTodo, updateTodo, deleteTodo },
   package: { individually: true },
   custom: {
     esbuild: {
