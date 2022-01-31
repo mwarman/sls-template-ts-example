@@ -11,7 +11,7 @@ const updateTodo: ValidatedEventAPIGatewayProxyHandler<typeof schema> = async (e
   console.log(`event:\n${JSON.stringify(event, null, 2)}`);
 
   try {
-    const { todoId, title, isComplete, createdAt } = event.body;
+    const { todoId, title, isComplete = false, createdAt } = event.body;
     if (event.pathParameters.todoId !== todoId) {
       // path parameter must match value in body; otherwise 400 bad request
       return formatJSONResponse(null, 400);

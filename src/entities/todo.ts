@@ -89,7 +89,7 @@ export class TodoEntity implements Entity<Todo, string> {
 
     try {
       // 1. map input
-      const { todoId, title, isComplete = false } = todo;
+      const { todoId, title, isComplete } = todo;
       const updatedAt = new Date().toISOString();
       const input: UpdateCommandInput = {
         TableName: TABLE_NAME,
