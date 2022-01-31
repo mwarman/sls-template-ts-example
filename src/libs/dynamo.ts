@@ -12,6 +12,7 @@ import {
   ScanCommand,
   ScanCommandInput,
   ScanCommandOutput,
+  TranslateConfig,
   UpdateCommand,
   UpdateCommandInput,
   UpdateCommandOutput,
@@ -35,7 +36,7 @@ const marshallOptions = {
 const unmarshallOptions = {
   wrapNumbers: false,
 };
-const translateConfig = { marshallOptions, unmarshallOptions };
+const translateConfig: TranslateConfig = { marshallOptions, unmarshallOptions };
 
 /**
  * DatabaseClient is a utility class providing behaviors for low-level

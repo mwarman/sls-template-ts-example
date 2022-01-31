@@ -4,7 +4,7 @@ import { middyfy } from '@libs/lambda';
 
 import schema from './schema';
 import { Todo, TodoEntity } from '@entities/todo';
-import { DatabaseClient } from '@utils/database';
+import { DatabaseClient } from '@libs/dynamo';
 
 const updateTodo: ValidatedEventAPIGatewayProxyHandler<typeof schema> = async (event) => {
   console.log('Handler::updateTodo');

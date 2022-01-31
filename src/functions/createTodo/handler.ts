@@ -5,7 +5,7 @@ import * as crypto from 'crypto';
 
 import schema from './schema';
 import { Todo, TodoEntity } from '@entities/todo';
-import { DatabaseClient } from '@utils/database';
+import { DatabaseClient } from '@libs/dynamo';
 
 const createTodo: ValidatedEventAPIGatewayProxyHandler<typeof schema> = async (event) => {
   console.log('Handler::createTodo');

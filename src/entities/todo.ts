@@ -1,5 +1,5 @@
 import { Entity } from '@entities/entity';
-import { DatabaseClient } from '@utils/database';
+import { DatabaseClient } from '@libs/dynamo';
 
 import {
   DeleteCommandInput,

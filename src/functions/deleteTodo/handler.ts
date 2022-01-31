@@ -3,7 +3,7 @@ import { formatJSONResponse } from '@libs/apiGateway';
 import { middyfy } from '@libs/lambda';
 
 import { TodoEntity } from '@entities/todo';
-import { DatabaseClient } from '@utils/database';
+import { DatabaseClient } from '@libs/dynamo';
 
 const deleteTodo: APIGatewayProxyHandler = async (event) => {
   console.log('Handler::deleteTodo');
