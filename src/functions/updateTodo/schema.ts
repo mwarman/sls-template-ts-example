@@ -7,5 +7,5 @@ export default {
     createdAt: { type: 'string' },
     updatedAt: { type: 'string' },
   },
-  required: ['title', 'todoId'],
+  required: ['isComplete', 'title', 'todoId'],
 } as const;

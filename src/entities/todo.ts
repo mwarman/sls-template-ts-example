@@ -93,20 +93,19 @@ export class TodoEntity implements Entity<Todo, string> {
 
     try {
       // 1. map input
-      const { todoId, title, isComplete } = todo;
-      const updatedAt = new Date().toISOString();
+      todo.updatedAt = new Date().toISOString();
       const input: UpdateCommandInput = {
         TableName: TABLE_NAME,
         Key: {
-          todoId,
+          todoId: todo.todoId,
         },
         UpdateExpression: 'SET title = :ti, isComplete = :ic, updatedAt = :ua',
         ConditionExpression: 'todoId = :id',
         ExpressionAttributeValues: {
-          ':id': todoId,
-          ':ti': title,
-          ':ic': isComplete,
-          ':ua': updatedAt,
+          ':id': todo.todoId,
+          ':ti': todo.title,
+          ':ic': todo.isComplete,
+          ':ua': todo.updatedAt,
         },
         ReturnValues: 'ALL_NEW',
       };
