@@ -1,7 +1,6 @@
 import type { ValidatedEventAPIGatewayProxyHandler } from '@libs/apiGateway';
 import { formatJSONResponse } from '@libs/apiGateway';
 import { middyfy } from '@libs/lambda';
-import * as crypto from 'crypto';
 
 import schema from './schema';
 import { Todo, TodoEntity } from '@entities/todo';
@@ -14,10 +13,8 @@ const createTodo: ValidatedEventAPIGatewayProxyHandler<typeof schema> = async (e
   try {
     const { title, isComplete = false } = event.body;
     const todoToCreate: Todo = {
-      todoId: crypto.randomBytes(8).toString('hex'),
       title,
       isComplete,
-      createdAt: new Date().toISOString(),
     };
 
     const databaseClient = new DatabaseClient();

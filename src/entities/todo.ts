@@ -1,3 +1,5 @@
+import * as crypto from 'crypto';
+
 import { Entity } from '@entities/entity';
 import { DatabaseClient } from '@libs/dynamo';
 
@@ -15,7 +17,7 @@ const TABLE_NAME = process.env.TABLE_NAME || 'table-name';
  * Interface Todo describes the properties of a `Todo` entity.
  */
 export interface Todo {
-  todoId: string;
+  todoId?: string;
   title: string;
   isComplete: boolean;
   createdAt?: string;
@@ -69,6 +71,8 @@ export class TodoEntity implements Entity<Todo, string> {
     console.log('TodoEntity::create');
 
     // 1. map input
+    todo.todoId = crypto.randomBytes(8).toString('hex');
+    todo.createdAt = new Date().toISOString();
     const input: PutCommandInput = {
       TableName: TABLE_NAME,
       Item: {
