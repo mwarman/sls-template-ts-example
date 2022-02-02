@@ -1,48 +1,31 @@
-import {
-  DeleteCommandOutput,
-  GetCommandInput,
-  GetCommandOutput,
-  PutCommandOutput,
-  ScanCommandOutput,
-  UpdateCommandInput,
-  UpdateCommandOutput,
-} from '@aws-sdk/lib-dynamodb';
-
 import { todoFixtures } from './fixtures';
 
-export class DatabaseClient {
-  scan(): Promise<ScanCommandOutput> {
-    return Promise.resolve({
-      $metadata: '',
-      Items: todoFixtures,
-    });
-  }
+export const mockDelete = jest.fn();
 
-  get(input: GetCommandInput): Promise<GetCommandOutput> {
-    const Item = todoFixtures.find((todo) => todo.todoId === input.Key.todoId);
-    return Promise.resolve({
-      $metadata: '',
-      Item,
-    });
-  }
+export const mockGet = jest.fn().mockImplementation((input) => {
+  const Item = todoFixtures.find((todo) => todo.todoId === input.Key.todoId);
+  return Promise.resolve({
+    Item,
+  });
+});
 
-  put(): Promise<PutCommandOutput> {
-    return Promise.resolve({
-      $metadata: '',
-    });
-  }
+export const mockPut = jest.fn();
 
-  update(input: UpdateCommandInput): Promise<UpdateCommandOutput> {
-    const Attributes = todoFixtures.find((todo) => todo.todoId === input.Key.todoId);
-    return Promise.resolve({
-      $metadata: '',
-      Attributes,
-    });
-  }
+export const mockScan = jest.fn().mockResolvedValue({ Items: todoFixtures });
 
-  delete(): Promise<DeleteCommandOutput> {
-    return Promise.resolve({
-      $metadata: '',
-    });
-  }
-}
+export const mockUpdate = jest.fn().mockImplementation((input) => {
+  const Attributes = todoFixtures.find((todo) => todo.todoId === input.Key.todoId);
+  return Promise.resolve({
+    Attributes,
+  });
+});
+
+export const DatabaseClient = jest.fn().mockImplementation(() => {
+  return {
+    delete: mockDelete,
+    get: mockGet,
+    put: mockPut,
+    scan: mockScan,
+    update: mockUpdate,
+  };
+});
